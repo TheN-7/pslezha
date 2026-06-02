@@ -3,82 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PS - Dega Lezhe - Lista Zgjedhore</title>
+    <title>PS - Dega Lezhe</title>
     <meta name="description" content="Platforma e Menaxhimit të Strukturës Politike të Partisë Socialiste - Dega Lezhe">
     <meta name="author" content="PS Dega Lezhe">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#ffffff',
+                        foreground: '#0a0a0a',
+                        primary: '#dc2626',
+                        'primary-foreground': '#ffffff',
+                        secondary: '#f4f4f5',
+                        'secondary-foreground': '#18181b',
+                        muted: '#f4f4f5',
+                        'muted-foreground': '#71717a',
+                        accent: '#f4f4f5',
+                        'accent-foreground': '#18181b',
+                        border: '#e4e4e7',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen">
-        <!-- Header -->
-        <header class="bg-white border-b">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
-                        <h1 class="text-xl font-bold">PS - Dega Lezhe</h1>
+<body class="bg-background min-h-screen">
+    <div class="min-h-screen flex w-full bg-background">
+        <!-- Sidebar -->
+        <div class="w-64 border-r border-border bg-muted/40 hidden md:block">
+            <div class="flex flex-col h-full">
+                <!-- Logo/Header -->
+                <div class="p-6 border-b border-border">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network h-6 w-6 text-primary-foreground">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg">PS Dega Lezhe</h1>
+                            <p class="text-xs text-muted-foreground">Platforma e Menaxhimit</p>
+                        </div>
                     </div>
-                    <nav class="flex space-x-4">
-                        <a href="dashboard.html" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                        <a href="structure.html" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Struktura</a>
-                        <a href="electoral-list.html" class="text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Lista Zgjedhore</a>
-                        <a href="families.html" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Familjet</a>
-                        <a href="emigrants.html" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Emigrantët</a>
-                        <a href="patronage-workers.html" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Punëtorë Patronazhi</a>
-                    </nav>
                 </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 p-4">
+                    <div class="space-y-2">
+                        <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4">
+                                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="structure.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users h-4 w-4">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Struktura
+                        </a>
+                        <a href="electoral-list.html" class="flex items-center gap-3 rounded-lg px-3 py-2 bg-primary text-primary-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list h-4 w-4">
+                                <line x1="8" x2="21" y1="6" y2="6"></line>
+                                <line x1="8" x2="21" y1="12" y2="12"></line>
+                                <line x1="8" x2="21" y1="18" y2="18"></line>
+                                <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                                <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                                <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                            </svg>
+                            Lista Zgjedhore
+                        </a>
+                        <a href="families.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home h-4 w-4">
+                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Familjet
+                        </a>
+                        <a href="emigrants.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane h-4 w-4">
+                                <path d="M2 12h20"></path>
+                                <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path>
+                                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                                <path d="M2 12 6.5 6c.6-.6 1.5-1 2.5-1h6c.9 0 1.8.4 2.5 1L22 12"></path>
+                            </svg>
+                            Emigrantët
+                        </a>
+                        <a href="patronage-workers.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase h-4 w-4">
+                                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            Punëtorë Patronazhi
+                        </a>
+                    </div>
+                </nav>
             </div>
-        </header>
+        </div>
 
         <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="bg-white rounded-lg shadow">
-                <div class="px-6 py-4 border-b">
-                    <h2 class="text-lg font-semibold">Lista Zgjedhore</h2>
-                    <p class="text-sm text-gray-500 mt-1">Kërko votuesit në bazë të emrit ose numrit personal</p>
+        <main class="flex-1 p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold tracking-tight">Lista Zgjedhore</h2>
+                    <p class="text-muted-foreground mt-2">Kërko dhe menaxho votuesit në listën zgjedhore</p>
                 </div>
 
-                <!-- Search Section -->
-                <div class="px-6 py-4 border-b">
-                    <div class="max-w-md">
-                        <input 
-                            type="text" 
-                            placeholder="Kërko votues..."
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
+                <!-- Search Card -->
+                <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm mb-6">
+                    <div class="p-6">
+                        <div class="max-w-md">
+                            <label class="text-sm font-medium mb-2 block">Kërko Votues</label>
+                            <input 
+                                type="text" 
+                                placeholder="Shkruani emrin ose numrin personal..."
+                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                        </div>
                     </div>
                 </div>
 
                 <!-- Results Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b bg-gray-50">
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Emri</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mbiemri</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Atësia</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nënësia</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Datëlindja</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NJU</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mosha</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preferencë</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referues</th>
-                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Veprime</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td colspan="11" class="px-6 py-8 text-center text-gray-500">
-                                    Shkruani të paktën 2 karaktere për të filluar kërkimin
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Results Count -->
-                <div class="px-6 py-4 border-t bg-gray-50">
-                    <p class="text-sm text-gray-600"></p>
+                <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+                    <div class="relative w-full overflow-auto">
+                        <table class="w-full caption-bottom text-sm">
+                            <thead class="[&_tr]:border-b">
+                                <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-12">#</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Emri</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Mbiemri</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Atësia</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nënësia</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Datëlindja</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">NJU</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Mosha</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Preferencë</th>
+                                    <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Referues</th>
+                                    <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Veprime</th>
+                                </tr>
+                            </thead>
+                            <tbody class="[&_tr:last-child]:border-0">
+                                <tr class="border-b transition-colors hover:bg-muted/50">
+                                    <td colspan="11" class="p-8 text-center text-muted-foreground">
+                                        Shkruani të paktën 2 karaktere për të filluar kërkimin
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Results Count -->
+                    <div class="border-t bg-muted/50 px-6 py-4">
+                        <p class="text-sm text-muted-foreground"></p>
+                    </div>
                 </div>
             </div>
         </main>
