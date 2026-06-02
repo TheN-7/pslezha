@@ -13,12 +13,12 @@ DATABASE = BASE_DIR / "users.db"
 LOCAL_VOTERS_DATABASE = BASE_DIR / "dogana.db"
 
 PAGES = {
-    "dashboard": "templates/dashboard.html",
-    "structure": "templates/structure.html",
-    "electoral-list": "templates/electoral-list.html",
-    "families": "templates/families.html",
-    "emigrants": "templates/emigrants.html",
-    "patronage-workers": "templates/patronage-workers.html",
+    "dashboard": "dashboard.html",
+    "structure": "structure.html",
+    "electoral-list": "electoral-list.html",
+    "families": "families.html",
+    "emigrants": "emigrants.html",
+    "patronage-workers": "patronage-workers.html",
 }
 
 app = Flask(__name__)
@@ -128,13 +128,26 @@ def electoral_search_script():
     return f"""
 <script>
 (function () {{
+  console.log('Search script loaded');
   const input = Array.from(document.querySelectorAll('input')).find(function (element) {{
     return (element.getAttribute('placeholder') || '').toLowerCase().includes('votues');
   }});
+  console.log('Input found:', input);
   const table = document.querySelector('table');
-  const tbody = table ? table.querySelector('tbody') : null;
+  console.log('Table found:', table);
+  let tbody = table ? table.querySelector('tbody') : null;
+  console.log('Tbody found:', tbody);
   const countText = document.querySelector('.border-t .text-sm.text-muted-foreground');
-  if (!input || !tbody) return;
+  if (!input || !table) {{
+    console.error('Input or table not found');
+    return;
+  }}
+
+  // If no tbody exists, we'll work directly with the table and remove existing rows
+  if (!tbody) {{
+    tbody = table;
+    console.log('Using table directly (no tbody)');
+  }}
 
   const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, function (char) {{
     return {{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[char];
@@ -161,7 +174,18 @@ def electoral_search_script():
       return;
     }}
 
-    tbody.innerHTML = rows.map(function (row, index) {{
+    // If working with table directly (no tbody), remove existing data rows first
+    if (tbody === table) {{
+      const existingRows = Array.from(table.querySelectorAll('tr'));
+      // Keep header row (first row with th), remove data rows
+      existingRows.forEach(function (tr, index) {{
+        if (index > 0) {{ // Skip header row
+          tr.remove();
+        }}
+      }});
+    }}
+
+    const newRowsHtml = rows.map(function (row, index) {{
       return '<tr class="border-b transition-colors data-[state=selected]:bg-muted hover:bg-muted/50">' +
         td(index + 1, 'font-medium') +
         td(row.first_name) +
@@ -176,11 +200,32 @@ def electoral_search_script():
         '<td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 text-right">' + eyeButton + '</td>' +
       '</tr>';
     }}).join('');
+
+    if (tbody === table) {{
+      tbody.insertAdjacentHTML('beforeend', newRowsHtml);
+    }} else {{
+      tbody.innerHTML = newRowsHtml;
+    }}
+
     if (countText) countText.textContent = 'Duke shfaqur 1 deri ' + rows.length + ' nga ' + rows.length + ' rezultate';
   }};
 
   const renderMessage = (message) => {{
-    tbody.innerHTML = '<tr class="border-b"><td class="p-6 text-center text-muted-foreground" colspan="11">' + escapeHtml(message) + '</td></tr>';
+    const messageHtml = '<tr class="border-b"><td class="p-6 text-center text-muted-foreground" colspan="11">' + escapeHtml(message) + '</td></tr>';
+    
+    if (tbody === table) {{
+      // Remove existing data rows first
+      const existingRows = Array.from(table.querySelectorAll('tr'));
+      existingRows.forEach(function (tr, index) {{
+        if (index > 0) {{ // Skip header row
+          tr.remove();
+        }}
+      }});
+      tbody.insertAdjacentHTML('beforeend', messageHtml);
+    }} else {{
+      tbody.innerHTML = messageHtml;
+    }}
+    
     if (countText) countText.textContent = message;
   }};
 
@@ -189,20 +234,34 @@ def electoral_search_script():
 
   const search = () => {{
     const query = input.value.trim();
+    console.log('Search called with query:', query);
     if (query.length < 2) {{
       renderMessage('Shkruani te pakten 2 karaktere per kerkim');
       return;
     }}
     if (controller) controller.abort();
     controller = new AbortController();
-    fetch('{url_for("api_voter_search")}?q=' + encodeURIComponent(query), {{ signal: controller.signal }})
-      .then((response) => response.json().then((data) => {{
-        if (!response.ok) throw new Error(data.error || 'Kerkimi deshtoi');
-        return data;
-      }}))
-      .then((data) => renderRows(data.results || []))
+    const url = '/api/voters/search?q=' + encodeURIComponent(query);
+    console.log('Fetching URL:', url);
+    fetch(url, {{ signal: controller.signal }})
+      .then((response) => {{
+        console.log('Response status:', response.status);
+        if (!response.ok) {{
+          return response.json().then((data) => {{
+            throw new Error(data.error || 'Kerkimi deshtoi');
+          }});
+        }}
+        return response.json();
+      }})
+      .then((data) => {{
+        console.log('Response data:', data);
+        renderRows(data.results || []);
+      }})
       .catch((error) => {{
-        if (error.name !== 'AbortError') renderMessage(error.message || 'Kerkimi deshtoi');
+        if (error.name !== 'AbortError') {{
+          console.error('Search error:', error);
+          renderMessage(error.message || 'Kerkimi deshtoi');
+        }}
       }});
   }};
 
