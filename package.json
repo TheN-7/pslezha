@@ -1,0 +1,9 @@
+{
+  "name": "pslezha-static-copy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static visual copy of the captured PS Dega Lezhe pages.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
