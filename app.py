@@ -25,8 +25,15 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "change-this-local-dev-secret")
 
 
+def find_first_existing(*paths):
+    for path in paths:
+        if path.exists():
+            return path
+    return paths[0]
+
+
 def load_env_file():
-    env_path = BASE_DIR / ".env"
+    env_path = find_first_existing(BASE_DIR / ".env", BASE_DIR.parent / ".env")
     if not env_path.exists():
         return
 
@@ -39,6 +46,9 @@ def load_env_file():
 
 
 load_env_file()
+LOCAL_VOTERS_DATABASE = find_first_existing(
+    BASE_DIR / "dogana.db", BASE_DIR.parent / "dogana.db"
+)
 
 
 def db_connect():
@@ -51,11 +61,25 @@ def voters_db_driver():
     return os.environ.get("VOTERS_DB_DRIVER", "sqlite").strip().lower()
 
 
+def mysql_host_and_port():
+    host = os.environ.get("VOTERS_DB_HOST", "localhost").strip()
+    port = int(os.environ.get("VOTERS_DB_PORT", "3306"))
+
+    if ":" in host and not host.startswith("["):
+        host_part, port_part = host.rsplit(":", 1)
+        if port_part.isdigit():
+            host = host_part
+            port = int(port_part)
+
+    return host, port
+
+
 def voters_db_connect():
     if voters_db_driver() == "mysql":
+        host, port = mysql_host_and_port()
         return pymysql.connect(
-            host=os.environ.get("VOTERS_DB_HOST", "localhost"),
-            port=int(os.environ.get("VOTERS_DB_PORT", "3306")),
+            host=host,
+            port=port,
             user=os.environ["VOTERS_DB_USER"],
             password=os.environ["VOTERS_DB_PASSWORD"],
             database=os.environ["VOTERS_DB_NAME"],
@@ -257,6 +281,43 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/api/db/status")
+@login_required
+def api_db_status():
+    driver = voters_db_driver()
+    status = {"driver": driver}
+
+    if driver == "mysql":
+        host, port = mysql_host_and_port()
+        status.update(
+            {
+                "host": host,
+                "port": port,
+                "database": os.environ.get("VOTERS_DB_NAME"),
+            }
+        )
+        try:
+            with voters_db_connect() as db:
+                with db.cursor() as cursor:
+                    cursor.execute("SELECT COUNT(*) AS count FROM `voters`")
+                    status["voters_count"] = cursor.fetchone()["count"]
+            status["ok"] = True
+        except Exception as error:
+            status["ok"] = False
+            status["error"] = str(error)
+        return jsonify(status)
+
+    status.update({"database": str(LOCAL_VOTERS_DATABASE)})
+    try:
+        with voters_db_connect() as db:
+            status["voters_count"] = db.execute("SELECT COUNT(*) FROM voters").fetchone()[0]
+        status["ok"] = True
+    except Exception as error:
+        status["ok"] = False
+        status["error"] = str(error)
+    return jsonify(status)
+
+
 @app.route("/api/voters/search")
 @login_required
 def api_voter_search():
@@ -344,4 +405,8 @@ def page(page_name):
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run(
+        debug=os.environ.get("FLASK_DEBUG", "0") == "1",
+        host=os.environ.get("FLASK_HOST", "0.0.0.0"),
+        port=int(os.environ.get("PORT", "5000")),
+    )
