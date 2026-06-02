@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS - Dega Lezhe</title>
+    <meta name="description" content="Platforma e Menaxhimit të Strukturës Politike të Partisë Socialiste - Dega Lezhe">
+    <meta name="author" content="PS Dega Lezhe">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        card: 'hsl(var(--card))',
+                        'card-foreground': 'hsl(var(--card-foreground))',
+                        popover: 'hsl(var(--popover))',
+                        'popover-foreground': 'hsl(var(--popover-foreground))',
+                        primary: 'hsl(var(--primary))',
+                        'primary-foreground': 'hsl(var(--primary-foreground))',
+                        secondary: 'hsl(var(--secondary))',
+                        'secondary-foreground': 'hsl(var(--secondary-foreground))',
+                        muted: 'hsl(var(--muted))',
+                        'muted-foreground': 'hsl(var(--muted-foreground))',
+                        accent: 'hsl(var(--accent))',
+                        'accent-foreground': 'hsl(var(--accent-foreground))',
+                        destructive: 'hsl(var(--destructive))',
+                        'destructive-foreground': 'hsl(var(--destructive-foreground))',
+                        border: 'hsl(var(--border))',
+                        input: 'hsl(var(--input))',
+                        ring: 'hsl(var(--ring))',
+                        'sidebar-background': 'hsl(var(--sidebar-background))',
+                        'sidebar-foreground': 'hsl(var(--sidebar-foreground))',
+                        'sidebar-primary': 'hsl(var(--sidebar-primary))',
+                        'sidebar-primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+                        'sidebar-accent': 'hsl(var(--sidebar-accent))',
+                        'sidebar-accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+                        'sidebar-border': 'hsl(var(--sidebar-border))',
+                        'sidebar-ring': 'hsl(var(--sidebar-ring))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --background: 210 20% 98%;
+            --foreground: 215 25% 27%;
+            --card: 0 0% 100%;
+            --card-foreground: 215 25% 27%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 215 25% 27%;
+            --primary: 278 71% 40%;
+            --primary-foreground: 0 0% 100%;
+            --secondary: 278 30% 95%;
+            --secondary-foreground: 215 25% 27%;
+            --muted: 278 20% 96%;
+            --muted-foreground: 215 16% 47%;
+            --accent: 278 71% 55%;
+            --accent-foreground: 0 0% 100%;
+            --destructive: 0 84% 60%;
+            --destructive-foreground: 0 0% 100%;
+            --border: 214 20% 88%;
+            --input: 214 20% 88%;
+            --ring: 214 84% 56%;
+            --radius: 0.5rem;
+            --sidebar-background: 278 50% 12%;
+            --sidebar-foreground: 0 0% 98%;
+            --sidebar-primary: 278 71% 40%;
+            --sidebar-primary-foreground: 0 0% 100%;
+            --sidebar-accent: 278 40% 18%;
+            --sidebar-accent-foreground: 0 0% 98%;
+            --sidebar-border: 278 40% 16%;
+            --sidebar-ring: 278 71% 40%;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen">
+    <div class="min-h-screen flex w-full bg-background">
+        <!-- Sidebar -->
+        <div class="w-64 border-border border-r hidden md:block bg-sidebar">
+            <div class="flex flex-col h-full">
+                <!-- Logo/Header -->
+                <div class="p-6 border-b border-sidebar-border">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-sidebar-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network h-6 w-6 text-sidebar-primary-foreground">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg text-sidebar-foreground">PS Dega Lezhe</h1>
+                            <p class="text-xs text-sidebar-foreground/70">Platforma e Menaxhimit</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 p-4">
+                    <div class="space-y-3">
+                        <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard h-4 w-4">
+                                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="structure.html" class="flex items-center gap-3 rounded-lg px-3 py-2 bg-sidebar-primary text-sidebar-primary-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users h-4 w-4">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Struktura
+                        </a>
+                        <a href="electoral-list.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list h-4 w-4">
+                                <line x1="8" x2="21" y1="6" y2="6"></line>
+                                <line x1="8" x2="21" y1="12" y2="12"></line>
+                                <line x1="8" x2="21" y1="18" y2="18"></line>
+                                <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                                <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                                <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                            </svg>
+                            Lista Zgjedhore
+                        </a>
+                        <a href="families.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home h-4 w-4">
+                                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Familjet
+                        </a>
+                        <a href="emigrants.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane h-4 w-4">
+                                <path d="M2 12h20"></path>
+                                <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path>
+                                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                                <path d="M2 12 6.5 6c.6-.6 1.5-1 2.5-1h6c.9 0 1.8.4 2.5 1L22 12"></path>
+                            </svg>
+                            Emigrantët
+                        </a>
+                        <a href="patronage-workers.html" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase h-4 w-4">
+                                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            Punëtorë Patronazhi
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold tracking-tight text-foreground">Struktura Politike</h2>
+                    <p class="text-muted-foreground mt-2">Menaxhimi i strukturës politike të Partisë Socialiste - Dega Lezhe</p>
+                </div>
+
+                <!-- Structure Content -->
+                <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-4">Hierarkia e Strukturës</h3>
+                        <p class="text-muted-foreground mb-4">Këtu do të shfaqet struktura e plotë organizative e degës.</p>
+                        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            <div class="rounded-lg border border-border bg-muted/50 p-4">
+                                <h4 class="font-semibold mb-2">Kryesia e Degës</h4>
+                                <p class="text-sm text-muted-foreground">Kryetar, Nënkryetar, Sekretar</p>
+                            </div>
+                            <div class="rounded-lg border border-border bg-muted/50 p-4">
+                                <h4 class="font-semibold mb-2">Këshilli i Degës</h4>
+                                <p class="text-sm text-muted-foreground">Anëtarët e këshillit drejtues</p>
+                            </div>
+                            <div class="rounded-lg border border-border bg-muted/50 p-4">
+                                <h4 class="font-semibold mb-2">Nënndarjet</h4>
+                                <p class="text-sm text-muted-foreground">Njësitë vendore dhe organizatat</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

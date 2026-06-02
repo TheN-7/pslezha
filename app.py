@@ -13,12 +13,12 @@ DATABASE = BASE_DIR / "users.db"
 LOCAL_VOTERS_DATABASE = BASE_DIR / "dogana.db"
 
 PAGES = {
-    "dashboard": "dashboard.html",
-    "structure": "structure.html",
-    "electoral-list": "electoral-list.html",
-    "families": "families.html",
-    "emigrants": "emigrants.html",
-    "patronage-workers": "patronage-workers.html",
+    "dashboard": "templates/dashboard.html",
+    "structure": "templates/structure.html",
+    "electoral-list": "templates/electoral-list.html",
+    "families": "templates/families.html",
+    "emigrants": "templates/emigrants.html",
+    "patronage-workers": "templates/patronage-workers.html",
 }
 
 app = Flask(__name__)
