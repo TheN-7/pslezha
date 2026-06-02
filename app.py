@@ -46,6 +46,7 @@ def load_env_file():
 
 
 load_env_file()
+app.secret_key = os.environ.get("SECRET_KEY", app.secret_key)
 LOCAL_VOTERS_DATABASE = find_first_existing(
     BASE_DIR / "dogana.db", BASE_DIR.parent / "dogana.db"
 )
@@ -127,7 +128,9 @@ def electoral_search_script():
     return f"""
 <script>
 (function () {{
-  const input = document.querySelector('input[placeholder*="votues" i]');
+  const input = Array.from(document.querySelectorAll('input')).find(function (element) {{
+    return (element.getAttribute('placeholder') || '').toLowerCase().includes('votues');
+  }});
   const table = document.querySelector('table');
   const tbody = table ? table.querySelector('tbody') : null;
   const countText = document.querySelector('.border-t .text-sm.text-muted-foreground');
@@ -176,19 +179,30 @@ def electoral_search_script():
     if (countText) countText.textContent = 'Duke shfaqur 1 deri ' + rows.length + ' nga ' + rows.length + ' rezultate';
   }};
 
+  const renderMessage = (message) => {{
+    tbody.innerHTML = '<tr class="border-b"><td class="p-6 text-center text-muted-foreground" colspan="11">' + escapeHtml(message) + '</td></tr>';
+    if (countText) countText.textContent = message;
+  }};
+
   let timer = null;
   let controller = null;
 
   const search = () => {{
     const query = input.value.trim();
-    if (query.length < 2) return;
+    if (query.length < 2) {{
+      renderMessage('Shkruani te pakten 2 karaktere per kerkim');
+      return;
+    }}
     if (controller) controller.abort();
     controller = new AbortController();
     fetch('{url_for("api_voter_search")}?q=' + encodeURIComponent(query), {{ signal: controller.signal }})
-      .then((response) => response.json())
+      .then((response) => response.json().then((data) => {{
+        if (!response.ok) throw new Error(data.error || 'Kerkimi deshtoi');
+        return data;
+      }}))
       .then((data) => renderRows(data.results || []))
       .catch((error) => {{
-        if (error.name !== 'AbortError') console.error(error);
+        if (error.name !== 'AbortError') renderMessage(error.message || 'Kerkimi deshtoi');
       }});
   }};
 
@@ -321,76 +335,80 @@ def api_db_status():
 @app.route("/api/voters/search")
 @login_required
 def api_voter_search():
-    query = request.args.get("q", "").strip()
-    limit = min(max(int(request.args.get("limit", 50)), 1), 100)
-    if len(query) < 2:
-        return jsonify({"results": []})
+    try:
+        query = request.args.get("q", "").strip()
+        limit = min(max(int(request.args.get("limit", 50)), 1), 100)
+        if len(query) < 2:
+            return jsonify({"results": []})
 
-    terms = [term for term in query.split() if term]
-    if not terms:
-        return jsonify({"results": []})
+        terms = [term for term in query.split() if term]
+        if not terms:
+            return jsonify({"results": []})
 
-    fields = [
-        "id",
-        "uniqueid",
-        "first_name",
-        "last_name",
-        "fathers_name",
-        "mothers_name",
-        "birthday",
-        "age",
-        "gender",
-        "admin_unit",
-        "qv",
-        "political_preference",
-        "phone_number",
-        "job_referrer",
-    ]
+        fields = [
+            "id",
+            "uniqueid",
+            "first_name",
+            "last_name",
+            "fathers_name",
+            "mothers_name",
+            "birthday",
+            "age",
+            "gender",
+            "admin_unit",
+            "qv",
+            "political_preference",
+            "phone_number",
+            "job_referrer",
+        ]
 
-    if voters_db_driver() == "mysql":
-        where = []
-        params = []
-        for term in terms:
-            like = f"%{term}%"
-            where.append(
-                "("
-                "`first_name` LIKE %s OR `last_name` LIKE %s OR "
-                "`fathers_name` LIKE %s OR `uniqueid` LIKE %s"
-                ")"
+        if voters_db_driver() == "mysql":
+            where = []
+            params = []
+            for term in terms:
+                like = f"%{term}%"
+                where.append(
+                    "("
+                    "`first_name` LIKE %s OR `last_name` LIKE %s OR "
+                    "`fathers_name` LIKE %s OR `uniqueid` LIKE %s"
+                    ")"
+                )
+                params.extend([like, like, like, like])
+            params.append(limit)
+            sql = (
+                f"SELECT {', '.join(f'`{field}`' for field in fields)} "
+                f"FROM `voters` WHERE {' AND '.join(where)} "
+                "ORDER BY `last_name`, `first_name` LIMIT %s"
             )
-            params.extend([like, like, like, like])
-        params.append(limit)
-        sql = (
-            f"SELECT {', '.join(f'`{field}`' for field in fields)} "
-            f"FROM `voters` WHERE {' AND '.join(where)} "
-            "ORDER BY `last_name`, `first_name` LIMIT %s"
-        )
-        with voters_db_connect() as db:
-            with db.cursor() as cursor:
-                cursor.execute(sql, params)
-                rows = cursor.fetchall()
-    else:
-        where = []
-        params = []
-        for term in terms:
-            like = f"%{term}%"
-            where.append(
-                "("
-                "first_name LIKE ? OR last_name LIKE ? OR "
-                "fathers_name LIKE ? OR uniqueid LIKE ?"
-                ")"
+            with voters_db_connect() as db:
+                with db.cursor() as cursor:
+                    cursor.execute(sql, params)
+                    rows = cursor.fetchall()
+        else:
+            where = []
+            params = []
+            for term in terms:
+                like = f"%{term}%"
+                where.append(
+                    "("
+                    "first_name LIKE ? OR last_name LIKE ? OR "
+                    "fathers_name LIKE ? OR uniqueid LIKE ?"
+                    ")"
+                )
+                params.extend([like, like, like, like])
+            params.append(limit)
+            sql = (
+                f"SELECT {', '.join(fields)} FROM voters "
+                f"WHERE {' AND '.join(where)} "
+                "ORDER BY last_name, first_name LIMIT ?"
             )
-            params.extend([like, like, like, like])
-        params.append(limit)
-        sql = (
-            f"SELECT {', '.join(fields)} FROM voters "
-            f"WHERE {' AND '.join(where)} "
-            "ORDER BY last_name, first_name LIMIT ?"
-        )
-        with voters_db_connect() as db:
-            rows = [dict(row) for row in db.execute(sql, params).fetchall()]
+            with voters_db_connect() as db:
+                rows = [dict(row) for row in db.execute(sql, params).fetchall()]
 
-    return jsonify({"results": rows})
+        return jsonify({"results": rows})
+    except Exception as error:
+        app.logger.exception("Voter search failed")
+        return jsonify({"error": str(error), "results": []}), 500
 
 
 @app.route("/<page_name>")
