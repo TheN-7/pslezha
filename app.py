@@ -235,7 +235,7 @@ def electoral_search_script():
   const search = () => {{
     const query = input.value.trim();
     console.log('Search called with query:', query);
-    if (query.length < 2) {{
+    if (query.length > 0 && query.length < 2) {{
       renderMessage('Shkruani te pakten 2 karaktere per kerkim');
       return;
     }}
@@ -397,6 +397,27 @@ def api_voter_search():
     try:
         query = request.args.get("q", "").strip()
         limit = min(max(int(request.args.get("limit", 50)), 1), 100)
+        if not query:
+            order_by = (
+                "ORDER BY `last_name`, `first_name`"
+                if voters_db_driver() == "mysql"
+                else "ORDER BY last_name, first_name"
+            )
+            if voters_db_driver() == "mysql":
+                sql = (
+                    f"SELECT {', '.join(f'`{field}`' for field in fields)} "
+                    f"FROM `voters` {order_by} LIMIT %s"
+                )
+                with voters_db_connect() as db:
+                    with db.cursor() as cursor:
+                        cursor.execute(sql, (limit,))
+                        rows = cursor.fetchall()
+            else:
+                sql = f"SELECT {', '.join(fields)} FROM voters {order_by} LIMIT ?"
+                with voters_db_connect() as db:
+                    rows = [dict(row) for row in db.execute(sql, (limit,)).fetchall()]
+            return jsonify({"results": rows})
+
         if len(query) < 2:
             return jsonify({"results": []})
 
